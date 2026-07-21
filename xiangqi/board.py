@@ -107,7 +107,9 @@ class Board:
         self.turn = RED
         self.move_history = []
         self.halfmove_clock = 0
+        self.position_counts = {}
         self._setup_initial_position()
+        self._record_position()
 
     # ------------------------------------------------------------------
     # Setup / basic accessors
@@ -130,7 +132,23 @@ class Board:
         new_board.turn = self.turn
         new_board.move_history = list(self.move_history)
         new_board.halfmove_clock = self.halfmove_clock
+        new_board.position_counts = dict(self.position_counts)
         return new_board
+
+    def _position_key(self):
+        rows = tuple(
+            tuple((p.color, p.kind) if p else None for p in row)
+            for row in self.grid
+        )
+        return (rows, self.turn)
+
+    def _record_position(self):
+        key = self._position_key()
+        self.position_counts[key] = self.position_counts.get(key, 0) + 1
+
+    def repetition_count(self):
+        """How many times the current position (board + side to move) has occurred."""
+        return self.position_counts.get(self._position_key(), 0)
 
     def in_bounds(self, file_, rank):
         return 0 <= file_ <= 8 and 0 <= rank <= 9
@@ -390,6 +408,7 @@ class Board:
         else:
             self.halfmove_clock += 1
         self.turn = opponent
+        self._record_position()
         return move
 
     def game_status(self):
@@ -424,6 +443,7 @@ class Board:
         board.turn = turn
         board.move_history = []
         board.halfmove_clock = halfmove_clock
+        board.position_counts = {}
         return board
 
     def render_ascii(self):

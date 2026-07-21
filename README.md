@@ -36,6 +36,9 @@ needing two humans.
   single move may take. Running out of either is an immediate loss.
 - **Draw by inactivity**: if a configurable number of moves (default 30)
   pass for *each* side with no capture and no check, the game is a draw.
+- **Draw by threefold repetition**: if the exact same position (same
+  piece placement, same side to move) occurs three times, the game is a
+  draw.
 - Disconnection during a match is a forfeit for the disconnected side.
   The admin can also kick a connected player (frees the seat before the
   match starts, or forfeits them if the match is already running).

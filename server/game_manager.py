@@ -244,6 +244,9 @@ class GameManager:
         if self.board.halfmove_clock >= self.config.draw_no_progress_halfmoves:
             await self._finish_game(None, "draw_no_progress")
             return
+        if self.board.repetition_count() >= 3:
+            await self._finish_game(None, "threefold_repetition")
+            return
 
         await self._start_turn()
         await self._broadcast_state()

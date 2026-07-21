@@ -115,8 +115,10 @@ class BoardView {
       ctx.stroke();
     }
 
-    this._drawPalaceCross(3, 0, 2);
-    this._drawPalaceCross(3, 7, 9);
+    this._drawPalaceCross(4, 0, 2);
+    this._drawPalaceCross(4, 7, 9);
+
+    this._drawColumnLabels();
 
     ctx.fillStyle = "#5b3a1e";
     ctx.font = `${Math.round(this._cellSize() * 0.4)}px sans-serif`;
@@ -167,6 +169,26 @@ class BoardView {
     ctx.moveTo(corners[1].x, corners[1].y);
     ctx.lineTo(corners[2].x, corners[2].y);
     ctx.stroke();
+  }
+
+  _drawColumnLabels() {
+    // Traditional Xiangqi column numbering: each side numbers 1-9 from
+    // its OWN right hand, independent of screen orientation/flip -- Red
+    // (facing "up" the board) has column 1 at Red's right, Black (facing
+    // the opposite way) has column 1 at Black's right. On an unflipped
+    // board (Red at bottom) this reads 9..1 left-to-right along Red's
+    // edge and 1..9 left-to-right along Black's edge.
+    const ctx = this.ctx;
+    ctx.fillStyle = "#5b3a1e";
+    ctx.font = `${Math.round(this._cellSize() * 0.3)}px sans-serif`;
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    for (let file = 0; file < BOARD_FILES; file++) {
+      const redPos = this._toScreen(file, -0.62);
+      ctx.fillText(String(9 - file), redPos.x, redPos.y);
+      const blackPos = this._toScreen(file, 9.62);
+      ctx.fillText(String(file + 1), blackPos.x, blackPos.y);
+    }
   }
 
   _highlightSquare(square, color) {

@@ -20,6 +20,7 @@ def empty_board(turn=RED):
     b.turn = turn
     b.move_history = []
     b.halfmove_clock = 0
+    b.position_counts = {}
     return b
 
 
@@ -225,3 +226,35 @@ def test_halfmove_clock_resets_on_check():
     board.apply_move((3, 5), (3, 8))  # slides up the d-file, checking black
     assert board.halfmove_clock == 0
     assert board.is_in_check(BLACK)
+
+
+def test_threefold_repetition_is_detected():
+    board = empty_board(RED)
+    board.position_counts = {}
+    board.set(4, 0, Piece(RED, GENERAL))
+    board.set(4, 1, Piece(RED, ADVISOR))  # blocks the e-file so generals never face off
+    board.set(4, 9, Piece(BLACK, GENERAL))
+    board.set(0, 0, Piece(RED, ROOK))
+    board.set(8, 9, Piece(BLACK, ROOK))
+    board._record_position()  # occurrence 1 of the starting position
+
+    for _ in range(2):
+        board.apply_move((0, 0), (0, 1))
+        board.apply_move((8, 9), (8, 8))
+        board.apply_move((0, 1), (0, 0))
+        board.apply_move((8, 8), (8, 9))
+        # back to the exact starting arrangement, Red to move again
+
+    assert board.turn == RED
+    assert board.repetition_count() == 3
+
+
+def test_different_positions_do_not_count_as_repetition():
+    board = empty_board(RED)
+    board.position_counts = {}
+    board.set(4, 0, Piece(RED, GENERAL))
+    board.set(3, 9, Piece(BLACK, GENERAL))
+    board.set(0, 0, Piece(RED, ROOK))
+    board._record_position()
+    board.apply_move((0, 0), (0, 1))
+    assert board.repetition_count() == 1

@@ -8,6 +8,7 @@ const REASON_KEY = {
   resign: "reason_resign",
   kicked: "reason_kicked",
   draw_no_progress: "reason_draw_no_progress",
+  threefold_repetition: "reason_threefold_repetition",
 };
 
 let ws = null;
