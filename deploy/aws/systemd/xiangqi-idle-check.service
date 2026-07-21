@@ -1,0 +1,6 @@
+[Unit]
+Description=Xiangqi idle-shutdown check (one-shot, triggered by the matching .timer)
+
+[Service]
+Type=oneshot
+ExecStart=/opt/xiangqi/idle_shutdown.sh

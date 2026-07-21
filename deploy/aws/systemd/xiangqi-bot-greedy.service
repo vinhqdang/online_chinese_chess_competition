@@ -1,0 +1,16 @@
+[Unit]
+Description=Xiangqi demo bot (greedy)
+After=xiangqi-server.service
+Requires=xiangqi-server.service
+
+[Service]
+Type=simple
+User=ec2-user
+WorkingDirectory=/opt/xiangqi/app
+ExecStartPre=/bin/sleep 5
+ExecStart=/opt/xiangqi/app/.venv/bin/python -m bots.greedy_bot --host localhost --port 8000 --name GreedyBot --think-delay 1.5
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

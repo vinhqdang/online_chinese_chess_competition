@@ -1,0 +1,15 @@
+[Unit]
+Description=Xiangqi competition server
+After=network.target
+
+[Service]
+Type=simple
+User=ec2-user
+WorkingDirectory=/opt/xiangqi/app
+Environment=XIANGQI_ACTIVITY_FILE=/opt/xiangqi/last_activity
+ExecStart=/opt/xiangqi/app/.venv/bin/python run_server.py --host 0.0.0.0 --port 8000
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target

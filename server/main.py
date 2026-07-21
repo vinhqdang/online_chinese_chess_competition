@@ -1,4 +1,5 @@
 import logging
+import os
 from pathlib import Path
 
 from fastapi import FastAPI, Request, WebSocket, WebSocketDisconnect
@@ -13,8 +14,36 @@ logging.basicConfig(level=logging.INFO)
 
 STATIC_DIR = Path(__file__).resolve().parent.parent / "static"
 
+# Optional: when deployed with auto-shutdown-on-idle (see deploy/aws), this
+# env var points at a file whose mtime an external timer script checks.
+# Touching it on every real HTTP hit (page loads, API calls) lets that
+# script tell "someone is around" apart from the background WebSocket
+# connections that never generate HTTP requests. No-op locally.
+ACTIVITY_FILE = os.environ.get("XIANGQI_ACTIVITY_FILE")
+
+
+def _touch_activity_file():
+    if not ACTIVITY_FILE:
+        return
+    try:
+        Path(ACTIVITY_FILE).touch()
+    except OSError:
+        pass
+
+
 app = FastAPI(title="Online Xiangqi Competition Server")
 manager = GameManager(GameConfig())
+
+
+@app.on_event("startup")
+async def _mark_startup_activity():
+    _touch_activity_file()
+
+
+@app.middleware("http")
+async def _track_activity(request: Request, call_next):
+    _touch_activity_file()
+    return await call_next(request)
 
 
 @app.get("/")

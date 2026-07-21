@@ -1,0 +1,16 @@
+[Unit]
+Description=Xiangqi demo auto-admin (keeps a bot-vs-bot match looping)
+After=xiangqi-server.service xiangqi-bot-random.service xiangqi-bot-greedy.service
+Requires=xiangqi-server.service
+
+[Service]
+Type=simple
+User=ec2-user
+WorkingDirectory=/opt/xiangqi/app
+ExecStartPre=/bin/sleep 8
+ExecStart=/opt/xiangqi/app/.venv/bin/python /opt/xiangqi/app/deploy/aws/auto_admin.py --host localhost --port 8000
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
