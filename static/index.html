@@ -1,0 +1,28 @@
+<title>Online Xiangqi Competition Server</title>
+<link rel="stylesheet" href="/static/css/style.css">
+
+<header class="topbar">
+  <h1 data-i18n="app_title">Online Xiangqi Competition Server</h1>
+  <select id="lang-select" class="lang-select">
+    <option value="en">English</option>
+    <option value="vi">Tiếng Việt</option>
+  </select>
+</header>
+
+<main>
+  <div class="panel">
+    <p data-i18n="subtitle">Chinese Chess referee server.</p>
+  </div>
+  <div class="panel">
+    <h2 data-i18n="choose_role">Choose your role</h2>
+    <div class="role-links">
+      <a href="/admin"><span data-i18n="role_admin">Admin</span></a>
+      <a href="/player"><span data-i18n="role_player">Player</span></a>
+    </div>
+  </div>
+</main>
+
+<script src="/static/js/i18n.js"></script>
+<script>
+  initLanguageToggle(document.getElementById("lang-select"));
+</script>

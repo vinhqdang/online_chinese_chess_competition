@@ -1,0 +1,69 @@
+<title>Player — Xiangqi Server</title>
+<link rel="stylesheet" href="/static/css/style.css">
+
+<header class="topbar">
+  <h1 data-i18n="player_title">Player</h1>
+  <div style="display:flex; gap:12px; align-items:center;">
+    <a href="/" style="color:#9aa4b2;" data-i18n="back_home">Back</a>
+    <select id="lang-select" class="lang-select">
+      <option value="en">English</option>
+      <option value="vi">Tiếng Việt</option>
+    </select>
+  </div>
+</header>
+
+<main>
+  <div class="panel" id="join-panel">
+    <label data-i18n="enter_name">Your name</label><br>
+    <input type="text" id="name-input" data-i18n-placeholder="enter_name" style="margin:8px 0; width:240px;">
+    <br>
+    <button id="join-btn" data-i18n="join_button">Join match</button>
+    <p id="join-msg" style="color:var(--muted);"></p>
+  </div>
+
+  <div class="panel hidden" id="waiting-panel">
+    <h2 data-i18n="waiting_room">Waiting room</h2>
+    <p id="you-are"></p>
+    <p data-i18n="waiting_for_opponent">Waiting for the admin to start the match…</p>
+    <p><span data-i18n="players_connected"></span>: <span id="players-count">0/2</span></p>
+  </div>
+
+  <div class="grid-2 hidden" id="game-panel">
+    <div class="panel">
+      <p id="you-are-2"></p>
+      <p id="turn-status" class="badge"></p>
+      <div style="display:flex; justify-content:space-between; margin-top:10px;">
+        <div>
+          <strong data-i18n="seat_red"></strong>
+          <span class="badge" id="red-warn">0</span>
+          <div class="clock" id="red-clock">--:--</div>
+        </div>
+        <div style="text-align:right;">
+          <strong data-i18n="seat_black"></strong>
+          <span class="badge" id="black-warn">0</span>
+          <div class="clock" id="black-clock">--:--</div>
+        </div>
+      </div>
+      <h3 data-i18n="move_log"></h3>
+      <div class="move-log" id="move-log"></div>
+      <button class="danger" id="resign-btn" data-i18n="resign_button" style="margin-top:12px;"></button>
+    </div>
+    <div class="panel">
+      <canvas id="board"></canvas>
+    </div>
+  </div>
+</main>
+
+<div class="overlay hidden" id="gameover-overlay">
+  <div class="card">
+    <h2 data-i18n="game_over"></h2>
+    <p id="gameover-text"></p>
+    <a href="/"><button class="secondary" data-i18n="back_home"></button></a>
+  </div>
+</div>
+
+<div class="toast hidden" id="toast"></div>
+
+<script src="/static/js/i18n.js"></script>
+<script src="/static/js/board.js"></script>
+<script src="/static/js/player.js"></script>

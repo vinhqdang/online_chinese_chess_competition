@@ -1,0 +1,89 @@
+<title>Admin — Xiangqi Server</title>
+<link rel="stylesheet" href="/static/css/style.css">
+
+<header class="topbar">
+  <h1 data-i18n="admin_title">Admin Dashboard</h1>
+  <div style="display:flex; gap:12px; align-items:center;">
+    <a href="/" style="color:#9aa4b2;" data-i18n="back_home">Back</a>
+    <select id="lang-select" class="lang-select">
+      <option value="en">English</option>
+      <option value="vi">Tiếng Việt</option>
+    </select>
+  </div>
+</header>
+
+<main>
+  <div class="panel">
+    <p data-i18n="connect_info">Share this address with competitors:</p>
+    <div id="connect-url">…</div>
+    <p style="color:var(--muted); font-size:0.85rem;" data-i18n="lan_note"></p>
+  </div>
+
+  <div class="grid-2">
+    <div class="panel">
+      <h2 data-i18n="lobby">Lobby</h2>
+      <div class="seat red">
+        <div><strong data-i18n="seat_red">Red</strong>: <span id="red-name" data-i18n="empty_seat"></span></div>
+        <button class="danger hidden" id="kick-red" data-i18n="kick">Kick</button>
+      </div>
+      <div class="seat black">
+        <div><strong data-i18n="seat_black">Black</strong>: <span id="black-name" data-i18n="empty_seat"></span></div>
+        <button class="danger hidden" id="kick-black" data-i18n="kick">Kick</button>
+      </div>
+
+      <h3 data-i18n="configure">Match configuration</h3>
+      <form class="config-form" id="config-form">
+        <label><span data-i18n="move_time_limit"></span>
+          <input type="number" min="1" id="cfg-move-time" value="60"></label>
+        <label><span data-i18n="match_time_limit"></span>
+          <input type="number" min="1" id="cfg-match-time" value="1800"></label>
+        <label><span data-i18n="max_warnings"></span>
+          <input type="number" min="1" id="cfg-max-warnings" value="3"></label>
+        <label><span data-i18n="draw_moves"></span>
+          <input type="number" min="1" id="cfg-draw-moves" value="30"></label>
+      </form>
+      <div style="display:flex; gap:10px; margin-top:10px;">
+        <button id="save-config-btn" data-i18n="save_config">Save configuration</button>
+      </div>
+      <p id="config-msg" style="color:var(--muted); font-size:0.85rem;"></p>
+
+      <div style="margin-top:16px; display:flex; gap:10px;">
+        <button id="start-btn" data-i18n="start_game" disabled>Start Match</button>
+        <button id="reset-btn" class="secondary hidden" data-i18n="reset_button">New Match</button>
+      </div>
+      <p id="start-msg" style="color:var(--muted); font-size:0.85rem;"></p>
+    </div>
+
+    <div class="panel">
+      <h2 data-i18n="spectate_title">Live match</h2>
+      <div id="board-wrap"><canvas id="board"></canvas></div>
+      <div style="display:flex; justify-content:space-between; margin-top:10px;">
+        <div>
+          <strong data-i18n="seat_red"></strong>
+          <span class="badge" id="red-warn">0</span>
+          <div class="clock" id="red-clock">--:--</div>
+        </div>
+        <div style="text-align:right;">
+          <strong data-i18n="seat_black"></strong>
+          <span class="badge" id="black-warn">0</span>
+          <div class="clock" id="black-clock">--:--</div>
+        </div>
+      </div>
+      <p><span data-i18n="turn_label"></span>: <span id="turn-indicator">—</span></p>
+      <h3 data-i18n="move_log"></h3>
+      <div class="move-log" id="move-log"></div>
+    </div>
+  </div>
+</main>
+
+<div class="overlay hidden" id="gameover-overlay">
+  <div class="card">
+    <h2 data-i18n="game_over"></h2>
+    <p id="gameover-text"></p>
+    <button id="gameover-close" class="secondary" data-i18n="back_home">OK</button>
+  </div>
+</div>
+
+<script src="/static/js/i18n.js"></script>
+<script src="/static/js/board.js"></script>
+<script src="/static/js/admin.js"></script>
