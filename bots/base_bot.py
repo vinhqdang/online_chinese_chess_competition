@@ -1,9 +1,12 @@
 """Shared WebSocket client harness for test-bot players.
 
 A bot connects to the server's /ws/player endpoint exactly like a browser
-would, reconstructs a xiangqi.Board from each state broadcast, and asks a
-strategy function to pick a legal move. The server remains the sole judge:
-the bot never applies its own move locally, it only proposes one.
+would, reconstructs a xiangqi.Board from each state broadcast, and calls a
+strategy function of exactly one argument -- the current board -- to get
+the next move. The server remains the sole judge: the bot never applies
+its own move locally, it only proposes one, and the server validates it.
+
+See docs/writing_a_bot.md for the function contract bot authors implement.
 """
 
 import argparse
@@ -46,11 +49,10 @@ async def run_bot(uri, name, choose_move, think_delay=0.5):
                 if msg.get("turn") != msg.get("your_color"):
                     continue
                 board = Board.from_matrix(msg["board"], turn=my_color)
-                legal = board.legal_moves(my_color)
-                if not legal:
+                if not board.legal_moves(my_color):
                     continue
                 await asyncio.sleep(think_delay)
-                src, dst = choose_move(board, my_color, legal)
+                src, dst = choose_move(board)
                 await ws.send(_json({"type": "move", "from": list(src), "to": list(dst)}))
             elif msg_type == "invalid_move":
                 logger.warning("%s: invalid move warning %s/%s (%s)", name, msg["warnings"], msg["max_warnings"], msg.get("reason"))

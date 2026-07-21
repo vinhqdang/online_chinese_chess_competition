@@ -120,6 +120,10 @@ naive opponent. Both reuse the same `xiangqi` rule engine as the server to
 compute legal moves from the state it broadcasts — they never trust their
 own judgment about legality, the server still validates every move.
 
+Writing your own bot means implementing exactly one function —
+`choose_move(board) -> (src, dst)` — see
+[`docs/writing_a_bot.md`](docs/writing_a_bot.md) for the full contract.
+
 ## Tests
 
 ```bash

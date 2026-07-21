@@ -24,7 +24,10 @@ def _score_move(board, color, src, dst):
     return score
 
 
-def choose_move(board, color, legal_moves):
+def choose_move(board):
+    """The one function a bot must implement: current board in, next move out."""
+    color = board.turn
+    legal_moves = board.legal_moves(color)
     scored = [(_score_move(board, color, src, dst), src, dst) for src, dst in legal_moves]
     best_score = max(s for s, _, _ in scored)
     best_moves = [(src, dst) for s, src, dst in scored if s == best_score]

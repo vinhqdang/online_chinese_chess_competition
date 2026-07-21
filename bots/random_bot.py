@@ -7,8 +7,9 @@ import random
 from .base_bot import build_arg_parser, run_bot, uri_from_args
 
 
-def choose_move(board, color, legal_moves):
-    return random.choice(legal_moves)
+def choose_move(board):
+    """The one function a bot must implement: current board in, next move out."""
+    return random.choice(board.legal_moves(board.turn))
 
 
 def main():
