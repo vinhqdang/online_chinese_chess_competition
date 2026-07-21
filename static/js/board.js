@@ -183,18 +183,25 @@ class BoardView {
   _drawPiece(file, rank, piece) {
     const ctx = this.ctx;
     const p = this._toScreen(file, rank);
-    const r = this._cellSize() * 0.42;
+    const r = this._cellSize() * 0.44;
+    const color = piece.color === "r" ? "#b32020" : "#1a1a1a";
+
     ctx.beginPath();
     ctx.arc(p.x, p.y, r, 0, Math.PI * 2);
     ctx.fillStyle = "#f6e6c8";
     ctx.fill();
-    ctx.lineWidth = 2;
-    ctx.strokeStyle = piece.color === "r" ? "#b32020" : "#1a1a1a";
+    ctx.lineWidth = Math.max(2, r * 0.09);
+    ctx.strokeStyle = color;
     ctx.stroke();
-    ctx.fillStyle = piece.color === "r" ? "#b32020" : "#1a1a1a";
-    ctx.font = `bold ${Math.round(r * 0.85)}px sans-serif`;
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, r * 0.86, 0, Math.PI * 2);
+    ctx.lineWidth = Math.max(1, r * 0.05);
+    ctx.stroke();
+
+    ctx.fillStyle = color;
+    ctx.font = `${Math.round(r * 1.15)}px "Noto Sans CJK SC", "Noto Sans SC", "Microsoft YaHei", "PingFang SC", "Heiti SC", "WenQuanYi Zen Hei", sans-serif`;
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
-    ctx.fillText(pieceLabel(piece.type), p.x, p.y);
+    ctx.fillText(pieceLabel(piece.color, piece.type), p.x, p.y + r * 0.05);
   }
 }

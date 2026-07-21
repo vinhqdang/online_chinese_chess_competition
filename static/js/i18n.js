@@ -133,9 +133,12 @@ const STRINGS = {
   },
 };
 
-const PIECE_LABELS = {
-  en: { G: "G", A: "A", E: "E", H: "H", R: "R", C: "C", P: "S" },
-  vi: { G: "Tg", A: "S", E: "Tượng", H: "M", R: "X", C: "P", P: "T" },
+// Traditional Xiangqi piece characters -- Red and Black use different
+// characters for the same piece type (this is standard, not a language
+// choice), so these are shown regardless of the EN/VI UI language.
+const PIECE_GLYPHS = {
+  r: { G: "帥", A: "仕", E: "相", H: "傌", R: "俥", C: "炮", P: "兵" },
+  b: { G: "將", A: "士", E: "象", H: "馬", R: "車", C: "砲", P: "卒" },
 };
 
 function getLang() {
@@ -151,9 +154,8 @@ function t(key) {
   return (STRINGS[lang] && STRINGS[lang][key]) || STRINGS.en[key] || key;
 }
 
-function pieceLabel(kind) {
-  const lang = getLang();
-  return (PIECE_LABELS[lang] && PIECE_LABELS[lang][kind]) || PIECE_LABELS.en[kind] || kind;
+function pieceLabel(color, kind) {
+  return (PIECE_GLYPHS[color] && PIECE_GLYPHS[color][kind]) || kind;
 }
 
 function applyTranslations(root = document) {
